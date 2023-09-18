@@ -17,8 +17,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "pedido")
+public class Pedido {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +30,8 @@ public class Order {
 	private LocalDate date;
 	
 	@NotNull
-	@ManyToOne
 	@JoinColumn(name = "employee_id")
-	private Employee id_employee;
+	private Employee employee_id;
 	
 	@NotNull
 	@ManyToOne
@@ -40,7 +39,7 @@ public class Order {
 	private Desk desk;
 	
 	@NotNull
-	private Double value;
+	private Double total;
 	
 	@NotNull
 	@Size(max = 100)
@@ -62,10 +61,10 @@ public class Order {
 	}
 
 	public Employee getId_employee() {
-		return id_employee;
+		return employee_id;
 	}
-	public void setId_employee(Employee id_employee) {
-		this.id_employee = id_employee;
+	public void setId_employee(Employee employee_id) {
+		this.employee_id = employee_id;
 	}
 
 	
@@ -76,11 +75,11 @@ public class Order {
 		this.desk = desk;
 	}
 	
-	public Double getValue() {
-		return value;
+	public Double getTotal() {
+		return total;
 	}
-	public void setValue(Double value) {
-		this.value = value;
+	public void setTotal(Double total) {
+		this.total = total;
 	}
 	public String getObservation() {
 		return observation;
@@ -102,7 +101,7 @@ public class Order {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Order other = (Order) obj;
+		Pedido other = (Pedido) obj;
 		return Objects.equals(id, other.id);
 	}
 }

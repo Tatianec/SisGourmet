@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-
 @Entity
 @Table(name = "product")
 public class Product {
@@ -21,7 +20,7 @@ public class Product {
 	
 	@NotNull
 	@Size(min = 3, max = 250)
-	private String nome;
+	private String name;
 	
 	@NotNull
 	@Size(min = 3, max = 250)
@@ -39,12 +38,12 @@ public class Product {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNome(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {

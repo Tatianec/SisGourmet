@@ -18,19 +18,20 @@ public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+		
 	@NotNull
 	@Size(min = 3, max = 50)
 	private String name;
+	
 	@NotNull
-	@Email
-	private String office;
+	private Boolean manager;
 	
 	@NotNull
 	@Email
 	private String email;
 	
 	@NotNull
-	@Size(min = 6, max = 8)
+	@Size(min = 2, max = 8)
 	private String password;
 	
 	public Long getId() {
@@ -46,13 +47,12 @@ public class Employee {
 		this.name = name;
 	}
 	
-	public String getOffice() {
-		return office;
+	public Boolean getManager() {
+		return manager;
 	}
-	public void setOffice(String office) {
-		this.office = office;
+	public void setManager(Boolean manager) {
+		this.manager = manager;
 	}
-	
 	public String getEmail() {
 		return email;
 	}
