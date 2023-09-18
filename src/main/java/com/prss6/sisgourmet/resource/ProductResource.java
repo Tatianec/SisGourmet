@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prss6.sisgourmet.model.Employee;
-import com.prss6.sisgourmet.repository.EmployeeRepository;
-import com.prss6.sisgourmet.service.EmployeeService;
+import com.prss6.sisgourmet.model.Product;
+import com.prss6.sisgourmet.repository.ProductRepository;
+import com.prss6.sisgourmet.service.ProductService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -28,26 +28,26 @@ import jakarta.validation.Valid;
 public class ProductResource {
 	
 	@Autowired
-	private EmployeeRepository productRepository;
+	private ProductRepository productRepository;
 	
 	@Autowired
-	private EmployeeService productService;
+	private ProductService productService;
 	
 	@GetMapping
-	public List<Employee> list(){
+	public List<Product> list(){
 		return productRepository.findAll();
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Employee create(@Valid @RequestBody Employee product, 
+	public Product create(@Valid @RequestBody Product product, 
 			HttpServletResponse response) {
 		return productRepository.save(product);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Employee> findById(@PathVariable Long id){
-		Optional<Employee> product = productRepository.findById(id);
+	public ResponseEntity<Product> findById(@PathVariable Long id){
+		Optional<Product> product = productRepository.findById(id);
 		if(product.isPresent()) {
 			return ResponseEntity.ok(product.get());
 		}
@@ -61,12 +61,10 @@ public class ProductResource {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Employee> update(@PathVariable Long id,
-			@Valid @RequestBody Employee product){
-		Employee productSaved = productService.update(id, product);
+	public ResponseEntity<Product> update(@PathVariable Long id,
+			@Valid @RequestBody Product product){
+		Product productSaved = productService.update(id, product);
 		return ResponseEntity.ok(productSaved);
 	}
-
-	
 	
 }

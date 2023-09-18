@@ -7,6 +7,4 @@ import com.prss6.sisgourmet.model.OrderItems;
 public interface OrderItemsRepository extends JpaRepository<OrderItems, Long> {
 
 
-
-
 }

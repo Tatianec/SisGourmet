@@ -8,23 +8,23 @@ import org.springframework.stereotype.Service;
 import com.prss6.sisgourmet.model.OrderItems;
 import com.prss6.sisgourmet.repository.OrderItemsRepository;
 
+
 @Service
 public class OrderItemsService {
-
+	
 	@Autowired
-	private OrderItemsRepository OrderItemsRepository;
+	private OrderItemsRepository orderItemsRepository;
 	
 	public OrderItems update(Long id, OrderItems OrderItems) {
 		OrderItems OrderItemsSaved = findOrderItemsById(id);
 		BeanUtils.copyProperties(OrderItems, OrderItemsSaved, "id");
-		return OrderItemsRepository.save(OrderItemsSaved);
+		return orderItemsRepository.save(OrderItemsSaved);
 	}
 
 	public OrderItems findOrderItemsById(Long id) {
-		OrderItems OrderItemsSaved = OrderItemsRepository.findById(id)
+		OrderItems OrderItemsSaved = orderItemsRepository.findById(id)
 				.orElseThrow(
 				(() -> new EmptyResultDataAccessException(1)));
 		return OrderItemsSaved;
 	}
-	
 }

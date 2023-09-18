@@ -62,8 +62,8 @@ public class DeskResource {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Desk> update(@PathVariable Long id,
-			@Valid @RequestBody Desk Desk){
-		Desk deskSaved = deskService.update(id, Desk);
+			@Valid @RequestBody Desk desk){
+		Desk deskSaved = deskService.update(id, desk);
 		return ResponseEntity.ok(deskSaved);
 	}
 

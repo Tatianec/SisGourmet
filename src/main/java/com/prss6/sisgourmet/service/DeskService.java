@@ -12,16 +12,16 @@ import com.prss6.sisgourmet.repository.DeskRepository;
 public class DeskService {
 
 	@Autowired
-	private DeskRepository DeskRepository;
+	private DeskRepository deskRepository;
 	
 	public Desk update(Long id, Desk Desk) {
 		Desk DeskSaved = findDeskById(id);
 		BeanUtils.copyProperties(Desk, DeskSaved, "id");
-		return DeskRepository.save(DeskSaved);
+		return deskRepository.save(DeskSaved);
 	}
 
 	public Desk findDeskById(Long id) {
-		Desk DeskSaved = DeskRepository.findById(id)
+		Desk DeskSaved = deskRepository.findById(id)
 				.orElseThrow(
 				(() -> new EmptyResultDataAccessException(1)));
 		return DeskSaved;

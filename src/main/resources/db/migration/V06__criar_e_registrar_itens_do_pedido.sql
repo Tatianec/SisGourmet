@@ -1,3 +1,4 @@
+
 CREATE TABLE order_items (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     qtd_items INT NOT NULL,
@@ -7,5 +8,7 @@ CREATE TABLE order_items (
     FOREIGN KEY (id_product) REFERENCES product(id)
 );
 
-INSERT INTO order_items(qtd_items, id_order, id_product) VALUES(1, 1, 1); -- 1 Burger for Order #1
-INSERT INTO order_items(qtd_items, id_order, id_product) VALUES(1, 1, 2); -- 1 Soda for Order #1
+INSERT INTO order_items(qtd_items, id_order, id_product) VALUES(1, 1, 1);
+INSERT INTO order_items(qtd_items, id_order, id_product) VALUES(1, 1, 2);
+
+

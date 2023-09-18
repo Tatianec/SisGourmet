@@ -30,6 +30,7 @@ public class Pedido {
 	private LocalDate date;
 	
 	@NotNull
+	@ManyToOne
 	@JoinColumn(name = "employee_id")
 	private Employee employee_id;
 	

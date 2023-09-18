@@ -7,11 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "order-items")
+@Table(name = "order_items")
 public class OrderItems {
 
 	@Id
@@ -22,10 +23,12 @@ public class OrderItems {
 	private int qtd_items;
 	
 	@NotNull
+	@ManyToOne
 	@JoinColumn(name = "id_order")
 	private Pedido id_order;
 
 	@NotNull
+	@ManyToOne
 	@JoinColumn(name = "id_product")
 	private Product id_product;
 		

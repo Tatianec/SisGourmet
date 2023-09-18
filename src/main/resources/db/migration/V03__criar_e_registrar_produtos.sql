@@ -7,3 +7,4 @@ CREATE TABLE product (
 
 INSERT INTO product(name, description, total) VALUES('Burger', 'Tasty beef burger', 5.5);
 INSERT INTO product(name, description, total) VALUES('Soda', 'Refreshing cola', 2.0);
+

@@ -7,6 +7,4 @@ import com.prss6.sisgourmet.model.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
-
-
 }

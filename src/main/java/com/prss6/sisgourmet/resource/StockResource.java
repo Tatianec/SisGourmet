@@ -66,7 +66,5 @@ public class StockResource {
 		Stock stockSaved = stockService.update(id, stock);
 		return ResponseEntity.ok(stockSaved);
 	}
-
-	
 	
 }

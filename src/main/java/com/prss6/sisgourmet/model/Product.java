@@ -27,7 +27,7 @@ public class Product {
 	private String description;
 	
 	@NotNull
-	private Double value;
+	private Double total;
 	
 		
 	public Long getId() {
@@ -55,11 +55,11 @@ public class Product {
 	}
 
 	public Double getValue() {
-		return value;
+		return total;
 	}
 
 	public void setValue(Double value) {
-		this.value = value;
+		this.total = value;
 	}
 
 	@Override

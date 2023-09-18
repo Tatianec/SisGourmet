@@ -12,19 +12,18 @@ import com.prss6.sisgourmet.repository.StockRepository;
 public class StockService {
 
 	@Autowired
-	private StockRepository StockRepository;
+	private StockRepository stockRepository;
 	
 	public Stock update(Long id, Stock Stock) {
 		Stock StockSaved = findStockById(id);
 		BeanUtils.copyProperties(Stock, StockSaved, "id");
-		return StockRepository.save(StockSaved);
+		return stockRepository.save(StockSaved);
 	}
 
 	public Stock findStockById(Long id) {
-		Stock StockSaved = StockRepository.findById(id)
+		Stock StockSaved = stockRepository.findById(id)
 				.orElseThrow(
 				(() -> new EmptyResultDataAccessException(1)));
 		return StockSaved;
 	}
-	
 }

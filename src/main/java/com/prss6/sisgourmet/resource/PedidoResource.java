@@ -17,39 +17,39 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prss6.sisgourmet.model.Pedido;
-import com.prss6.sisgourmet.repository.OrderRepository;
-import com.prss6.sisgourmet.service.OrderService;
+import com.prss6.sisgourmet.repository.PedidoRepository;
+import com.prss6.sisgourmet.service.PedidoService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/order")
-public class OrderResource {
+@RequestMapping("/pedido")
+public class PedidoResource {
 	
 	@Autowired
-	private OrderRepository orderRepository;
+	private PedidoRepository pedidoRepository;
 	
 	@Autowired
-	private OrderService orderService;
+	private PedidoService pedidoService;
 	
 	@GetMapping
 	public List<Pedido> list(){
-		return orderRepository.findAll();
+		return pedidoRepository.findAll();
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Pedido create(@Valid @RequestBody Pedido order, 
+	public Pedido create(@Valid @RequestBody Pedido pedido, 
 			HttpServletResponse response) {
-		return orderRepository.save(order);
+		return pedidoRepository.save(pedido);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Pedido> findById(@PathVariable Long id){
-		Optional<Pedido> order = orderRepository.findById(id);
-		if(order.isPresent()) {
-			return ResponseEntity.ok(order.get());
+		Optional<Pedido> pedido = pedidoRepository.findById(id);
+		if(pedido.isPresent()) {
+			return ResponseEntity.ok(pedido.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -57,16 +57,14 @@ public class OrderResource {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remove(@PathVariable Long id) {
-		orderRepository.deleteById(id);
+		pedidoRepository.deleteById(id);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Pedido> update(@PathVariable Long id,
-			@Valid @RequestBody Pedido order){
-		Pedido orderSaved = orderService.update(id, order);
-		return ResponseEntity.ok(orderSaved);
+			@Valid @RequestBody Pedido pedido){
+		Pedido pedidoSaved = pedidoService.update(id, pedido);
+		return ResponseEntity.ok(pedidoSaved);
 	}
-
-	
 	
 }

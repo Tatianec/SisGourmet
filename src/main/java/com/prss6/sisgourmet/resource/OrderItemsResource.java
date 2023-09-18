@@ -16,40 +16,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prss6.sisgourmet.model.Pedido;
-import com.prss6.sisgourmet.repository.OrderRepository;
-import com.prss6.sisgourmet.service.OrderService;
+import com.prss6.sisgourmet.model.OrderItems;
+import com.prss6.sisgourmet.repository.OrderItemsRepository;
+import com.prss6.sisgourmet.service.OrderItemsService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/order-items")
+@RequestMapping("/orderItems")
 public class OrderItemsResource {
 	
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrderItemsRepository orderItemsRepository;
 	
 	@Autowired
-	private OrderService orderService;
+	private OrderItemsService orderItemsService;
 	
 	@GetMapping
-	public List<Pedido> list(){
-		return orderRepository.findAll();
+	public List<OrderItems> list(){
+		return orderItemsRepository.findAll();
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Pedido create(@Valid @RequestBody Pedido order, 
+	public OrderItems create(@Valid @RequestBody OrderItems orderItems, 
 			HttpServletResponse response) {
-		return orderRepository.save(order);
+		return orderItemsRepository.save(orderItems);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Pedido> findById(@PathVariable Long id){
-		Optional<Pedido> order = orderRepository.findById(id);
-		if(order.isPresent()) {
-			return ResponseEntity.ok(order.get());
+	public ResponseEntity<OrderItems> findById(@PathVariable Long id){
+		Optional<OrderItems> orderItems = orderItemsRepository.findById(id);
+		if(orderItems.isPresent()) {
+			return ResponseEntity.ok(orderItems.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -57,16 +57,14 @@ public class OrderItemsResource {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remove(@PathVariable Long id) {
-		orderRepository.deleteById(id);
+		orderItemsRepository.deleteById(id);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Pedido> update(@PathVariable Long id,
-			@Valid @RequestBody Pedido order){
-		Pedido orderSaved = orderService.update(id, order);
-		return ResponseEntity.ok(orderSaved);
+	public ResponseEntity<OrderItems> update(@PathVariable Long id,
+			@Valid @RequestBody OrderItems orderItems){
+		OrderItems orderItemsSaved = orderItemsService.update(id, orderItems);
+		return ResponseEntity.ok(orderItemsSaved);
 	}
-
-	
 	
 }
