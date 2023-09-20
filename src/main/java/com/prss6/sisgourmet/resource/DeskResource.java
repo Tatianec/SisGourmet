@@ -67,6 +67,21 @@ public class DeskResource {
 		return ResponseEntity.ok(deskSaved);
 	}
 
-	
+	@PostMapping("/{id}/reserve")
+	public ResponseEntity<?> reserveDesk(@PathVariable Long id){
+	    try {
+	        Desk reservedDesk = deskService.reserveDesk(id);
+	        return ResponseEntity.ok(reservedDesk);
+	    } catch (IllegalStateException e) {
+	        return ResponseEntity.badRequest().body(e.getMessage());
+	    }
+	}
+
+	@PostMapping("/{id}/release")
+	public ResponseEntity<Desk> releaseDesk(@PathVariable Long id){
+	    Desk releasedDesk = deskService.releaseDesk(id);
+	    return ResponseEntity.ok(releasedDesk);
+	}
+
 	
 }

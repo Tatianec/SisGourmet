@@ -26,5 +26,24 @@ public class DeskService {
 				(() -> new EmptyResultDataAccessException(1)));
 		return DeskSaved;
 	}
+
+	public Desk reserveDesk(Long id) {
+	    Desk desk = findDeskById(id);
+	    if(desk.getAvailable()) {
+	        throw new IllegalStateException("Desk already reserved");
+	    }
+	    desk.setAvailable(true);
+	    return deskRepository.save(desk);
+	}
+
+	public Desk releaseDesk(Long id) {
+	    Desk desk = findDeskById(id);
+	    if(!desk.getAvailable()) {
+	        throw new IllegalStateException("Desk is not reserved");
+	    }
+	    desk.setAvailable(false);
+	    return deskRepository.save(desk);
+	}
+
 	
 }
