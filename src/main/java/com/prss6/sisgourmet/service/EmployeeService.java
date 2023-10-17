@@ -14,17 +14,15 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
-	public Employee update(Long id, Employee Employee) {
-		Employee EmployeeSaved = findEmployeeById(id);
-		BeanUtils.copyProperties(Employee, EmployeeSaved, "id");
-		return employeeRepository.save(EmployeeSaved);
+	public Employee update(Long id, Employee employee) {
+		Employee employeeSaved = findEmployeeById(id);
+		BeanUtils.copyProperties(employee, employeeSaved, "id");
+		return employeeRepository.save(employeeSaved);
 	}
 
 	public Employee findEmployeeById(Long id) {
-		Employee EmployeeSaved = employeeRepository.findById(id)
-				.orElseThrow(
-				(() -> new EmptyResultDataAccessException(1)));
-		return EmployeeSaved;
+		return employeeRepository.findById(id)
+				 .orElseThrow(() -> new EmptyResultDataAccessException(1));
 	}
-	
 }
+
