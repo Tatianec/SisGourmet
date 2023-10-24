@@ -42,10 +42,6 @@ public class Product {
 		return name;
 	}
 
-	public void setNome(String name) {
-		this.name = name;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -53,13 +49,17 @@ public class Product {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Double getValue() {
+	
+	public Double getTotal() {
 		return total;
 	}
 
-	public void setValue(Double value) {
-		this.total = value;
+	public void setTotal(Double total) {
+		this.total = total;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
