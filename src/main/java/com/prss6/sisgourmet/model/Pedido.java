@@ -1,9 +1,12 @@
 package com.prss6.sisgourmet.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,12 +14,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "pedido")
 public class Pedido {
 
@@ -29,22 +35,33 @@ public class Pedido {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate date;
 	
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "employee_id")
-	private Employee employee_id;
+	@JsonProperty("employee_id")
+	@Column(name = "employee_id")
+	private Long employeeId;
+
+	@JsonProperty("desk_id")
+	@Column(name = "desk_id")
+	private Long deskId;
+
 	
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "desk_id")
-	private Desk desk;
-	
+	@ManyToMany
+	@JoinTable(
+	    name = "pedido_product",
+	    joinColumns = @JoinColumn(name = "id_pedido"),
+	    inverseJoinColumns = @JoinColumn(name = "id_product")
+	)
+	private List<Product> products;
+		
 	@NotNull
 	private Double total;
 	
 	@NotNull
 	@Size(max = 100)
 	private String observation;
+	
+	
+	@Transient 
+	private List<Long> productIds;
 	
 	
 	public Long getId() {
@@ -61,21 +78,6 @@ public class Pedido {
 		this.date = date;
 	}
 
-	public Employee getId_employee() {
-		return employee_id;
-	}
-	public void setId_employee(Employee employee_id) {
-		this.employee_id = employee_id;
-	}
-
-	
-	public Desk getTable() {
-		return desk;
-	}
-	public void setTable(Desk desk) {
-		this.desk = desk;
-	}
-	
 	public Double getTotal() {
 		return total;
 	}
@@ -88,7 +90,35 @@ public class Pedido {
 	public void setObservation(String observation) {
 		this.observation = observation;
 	}
+
+	public Long getDeskId() {
+		return deskId;
+	}
+	public void setDeskId(Long deskId) {
+		this.deskId = deskId;
+	}
 	
+	public Long getEmployeeId() {
+		return employeeId;
+	}
+	public void setEmployeeId(Long employeeId) {
+		this.employeeId = employeeId;
+	}
+	public List<Product> getProducts() {
+		return products;
+	}
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+	
+	
+	
+	public List<Long> getProductIds() {
+		return productIds;
+	}
+	public void setProductIds(List<Long> productIds) {
+		this.productIds = productIds;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

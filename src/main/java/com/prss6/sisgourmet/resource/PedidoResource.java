@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,52 +22,50 @@ import com.prss6.sisgourmet.model.Pedido;
 import com.prss6.sisgourmet.repository.PedidoRepository;
 import com.prss6.sisgourmet.service.PedidoService;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/pedido")
 public class PedidoResource {
-	
+
 	@Autowired
 	private PedidoRepository pedidoRepository;
-	
+
 	@Autowired
 	private PedidoService pedidoService;
-	
+
 	@GetMapping
-	public List<Pedido> list(){
+	public List<Pedido> list() {
 		return pedidoRepository.findAll();
 	}
-	
+
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Pedido create(@Valid @RequestBody Pedido pedido, 
-			HttpServletResponse response) {
-		return pedidoRepository.save(pedido);
+	public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido, @RequestParam List<Long> productIds) {
+	    Pedido savedPedido = pedidoService.savePedido(pedido, productIds);
+	    return ResponseEntity.ok(savedPedido);
 	}
-	
+
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Pedido> findById(@PathVariable Long id){
+	public ResponseEntity<Pedido> findById(@PathVariable Long id) {
 		Optional<Pedido> pedido = pedidoRepository.findById(id);
-		if(pedido.isPresent()) {
+		if (pedido.isPresent()) {
 			return ResponseEntity.ok(pedido.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remove(@PathVariable Long id) {
 		pedidoRepository.deleteById(id);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Pedido> update(@PathVariable Long id,
-			@Valid @RequestBody Pedido pedido){
+	public ResponseEntity<Pedido> update(@PathVariable Long id, @Valid @RequestBody Pedido pedido) {
 		Pedido pedidoSaved = pedidoService.update(id, pedido);
 		return ResponseEntity.ok(pedidoSaved);
 	}
-	
+
 }

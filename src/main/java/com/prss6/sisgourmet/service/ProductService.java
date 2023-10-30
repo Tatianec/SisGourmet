@@ -11,19 +11,16 @@ import com.prss6.sisgourmet.repository.ProductRepository;
 @Service
 public class ProductService {
 
-	@Autowired
-	private ProductRepository productRepository;
-	
-	public Product update(Long id, Product Product) {
-		Product ProductSaved = findProductById(id);
-		BeanUtils.copyProperties(Product, ProductSaved, "id");
-		return productRepository.save(ProductSaved);
-	}
+    @Autowired
+    private ProductRepository productRepository;
 
-	public Product findProductById(Long id) {
-		Product ProductSaved = productRepository.findById(id)
-				.orElseThrow(
-				(() -> new EmptyResultDataAccessException(1)));
-		return ProductSaved;
-	}
+    public Product update(Long id, Product product) {
+        Product productSaved = findProductById(id);
+        BeanUtils.copyProperties(product, productSaved, "id");
+        return productRepository.save(productSaved);
+    }
+
+    public Product findProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
+    }
 }
