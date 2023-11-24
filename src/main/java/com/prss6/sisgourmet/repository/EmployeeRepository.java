@@ -8,5 +8,6 @@ import com.prss6.sisgourmet.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByEmail(String email);
+    Optional<Employee> findByEmailAndPassword(String email, String password);
 }
 

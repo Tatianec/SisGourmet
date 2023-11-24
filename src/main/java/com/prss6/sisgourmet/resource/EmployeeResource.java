@@ -1,12 +1,15 @@
 package com.prss6.sisgourmet.resource;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,62 +26,81 @@ import com.prss6.sisgourmet.model.LoginResponse;
 import com.prss6.sisgourmet.repository.EmployeeRepository;
 import com.prss6.sisgourmet.service.EmployeeService;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-
-
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/employees")
 public class EmployeeResource {
-	
+
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	
+
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 
 	@PostMapping("/authenticate")
 	public ResponseEntity<LoginResponse> login(@RequestBody Employee employeeRequest) {
-	    Optional<Employee> employee = employeeRepository.findByEmail(employeeRequest.getEmail());
+	    System.out.println("Tentativa de Login - Email: " + employeeRequest.getEmail());
 
-	    if (employee.isPresent() && Objects.equals(employee.get().getPassword(), employeeRequest.getPassword())) {
-	        return ResponseEntity.ok(new LoginResponse(true, "Login bem-sucedido!"));
+	    Optional<Employee> optionalEmployee = employeeRepository.findByEmail(employeeRequest.getEmail());
+
+	    if (optionalEmployee.isPresent()) {
+	        Employee storedEmployee = optionalEmployee.get();
+	        boolean passwordMatch = passwordEncoder.matches(employeeRequest.getPassword(), storedEmployee.getPassword());
+
+	        if (passwordMatch) {
+	            System.out.println("Login bem-sucedido para: " + employeeRequest.getEmail());
+	            return ResponseEntity.ok(new LoginResponse(true, "Login bem-sucedido!"));
+	        } else {
+	            System.out.println("Falha no login para: " + employeeRequest.getEmail());
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                    .body(new LoginResponse(false, "Email ou senha incorretos!"));
+	        }
+	    } else {
+	        System.out.println("Falha no login para: " + employeeRequest.getEmail());
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                .body(new LoginResponse(false, "Email ou senha incorretos!"));
 	    }
-	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(false, "Email ou senha incorretos!"));
 	}
-
 
 	@GetMapping
-	public List<Employee> list(){
+	public List<Employee> list() {
 		return employeeRepository.findAll();
 	}
-	
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Employee create(@Valid @RequestBody Employee employee, HttpServletResponse response) {
+		String encodedPassword = passwordEncoder.encode(employee.getPassword());
+		employee.setPassword(encodedPassword);
 		return employeeRepository.save(employee);
+
 	}
-	
+
 	@GetMapping("/id/{id}")
-	public ResponseEntity<Employee> findById(@PathVariable Long id){
+	public ResponseEntity<Employee> findById(@PathVariable Long id) {
 		Optional<Employee> employee = employeeRepository.findById(id);
-		if(employee.isPresent()) {
+		if (employee.isPresent()) {
 			return ResponseEntity.ok(employee.get());
 		}
-		return ResponseEntity.notFound().build();
+		return employeeRepository.findById(id)
+		        .map(ResponseEntity::ok)
+		        .orElse(ResponseEntity.notFound().build());
+
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remove(@PathVariable Long id) {
 		employeeRepository.deleteById(id);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Employee> update(@PathVariable Long id, @Valid @RequestBody Employee employee){
-		Employee employeeSaved = employeeService.update(id, employee);
-		return ResponseEntity.ok(employeeSaved);
+	public ResponseEntity<Employee> update(@PathVariable Long id, @Valid @RequestBody Employee employee) {
+	    Employee employeeSaved = employeeService.update(id, employee);
+	    return ResponseEntity.ok(employeeSaved);
 	}
 }

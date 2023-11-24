@@ -2,14 +2,16 @@ package com.prss6.sisgourmet.model;
 
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 @Entity
 @Table(name = "employee")
@@ -31,8 +33,9 @@ public class Employee {
 	private String email;
 	
 	@NotNull
-	@Size(min = 2, max = 8)
-	private String password;
+    @Size(min = 2, max = 60)
+	@Column(name = "password", nullable = false, length = 60)
+    private String password;
 	
 	public Long getId() {
 		return id;

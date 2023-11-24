@@ -3,6 +3,8 @@ package com.prss6.sisgourmet.resource;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prss6.sisgourmet.model.Pedido;
 import com.prss6.sisgourmet.repository.PedidoRepository;
 import com.prss6.sisgourmet.service.PedidoService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")

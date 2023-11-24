@@ -14,8 +14,6 @@ import com.prss6.sisgourmet.repository.EmployeeRepository;
 import com.prss6.sisgourmet.repository.PedidoRepository;
 import com.prss6.sisgourmet.repository.ProductRepository;
 
-import jakarta.validation.ValidationException;
-
 @Service
 public class PedidoService {
 
