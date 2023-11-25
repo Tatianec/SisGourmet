@@ -53,7 +53,8 @@ public class EmployeeResource {
 
 	        if (passwordMatch) {
 	            System.out.println("Login bem-sucedido para: " + employeeRequest.getEmail());
-	            return ResponseEntity.ok(new LoginResponse(true, "Login bem-sucedido!"));
+	            System.out.println(storedEmployee.getId());
+	            return ResponseEntity.ok(new LoginResponse(true, "Login bem-sucedido!", storedEmployee.getId()));
 	        } else {
 	            System.out.println("Falha no login para: " + employeeRequest.getEmail());
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
