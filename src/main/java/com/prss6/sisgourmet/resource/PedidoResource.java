@@ -16,34 +16,45 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prss6.sisgourmet.model.Pedido;
+import com.prss6.sisgourmet.model.PedidoProduct;
+import com.prss6.sisgourmet.model.Product;
 import com.prss6.sisgourmet.repository.PedidoRepository;
+import com.prss6.sisgourmet.service.PedidoProductService;
 import com.prss6.sisgourmet.service.PedidoService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/pedido")
 public class PedidoResource {
+	
+    @Autowired
+    private PedidoService pedidoService;
 
-	@Autowired
-	private PedidoRepository pedidoRepository;
+    @Autowired
+    private PedidoRepository pedidoRepository;
+    
+    @Autowired
+    private PedidoProductService pedidoProductService;
 
-	@Autowired
-	private PedidoService pedidoService;
+    @PostMapping
+    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
+        for (PedidoProduct pedidoProduto : pedido.getProducts()) {
+            pedidoProduto.setPedido(pedido);
+            pedidoProductService.savePedidoProduct(pedidoProduto);
+        }
 
+        Pedido novoPedido = pedidoService.savePedido(pedido);
+
+        return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
+    }
+    
 	@GetMapping
-	public List<Pedido> list() {
-		return pedidoRepository.findAll();
-	}
-
-	@PostMapping
-	public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido, @RequestParam List<Long> productIds) {
-	    Pedido savedPedido = pedidoService.savePedido(pedido, productIds);
-	    return ResponseEntity.ok(savedPedido);
+	public List<Pedido> list(){
+		return pedidoRepository.findAllWithoutProdutos();
 	}
 
 
