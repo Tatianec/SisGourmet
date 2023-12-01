@@ -54,7 +54,7 @@ public class PedidoResource {
     
 	@GetMapping
 	public List<Pedido> list(){
-		return pedidoRepository.findAllWithoutProdutos();
+		return pedidoRepository.findAll();
 	}
 
 

@@ -9,7 +9,5 @@ import com.prss6.sisgourmet.model.Pedido;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
-    @Query("SELECT p FROM Pedido p")
-    List<Pedido> findAllWithoutProdutos();
 
 }

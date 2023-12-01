@@ -33,7 +33,7 @@ public class Pedido {
 
 	@NotNull
 	@Column(name = "order_date")
-	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate date;
 
 	@JsonProperty("employee_id")
