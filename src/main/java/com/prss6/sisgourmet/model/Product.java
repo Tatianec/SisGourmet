@@ -20,19 +20,24 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotNull
 	@Size(min = 3, max = 250)
 	private String name;
-	
+
 	@NotNull
 	@Size(min = 3, max = 250)
 	private String description;
-	
+
 	@NotNull
 	private Double total;
-	
-		
+
+	@NotNull
+	private Boolean estoque;
+
+	@NotNull
+	private Integer qtd_items;
+
 	public Long getId() {
 		return id;
 	}
@@ -52,7 +57,7 @@ public class Product {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public Double getTotal() {
 		return total;
 	}
@@ -65,11 +70,27 @@ public class Product {
 		this.name = name;
 	}
 
+	public Boolean getEstoque() {
+		return estoque;
+	}
+
+	public void setEstoque(Boolean estoque) {
+		this.estoque = estoque;
+	}
+
+	public Integer getQtd_items() {
+		return qtd_items;
+	}
+
+	public void setQtd_items(Integer qtd_items) {
+		this.qtd_items = qtd_items;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -81,5 +102,5 @@ public class Product {
 		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
 	}
-		
+
 }

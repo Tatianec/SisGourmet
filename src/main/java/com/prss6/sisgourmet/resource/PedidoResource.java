@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prss6.sisgourmet.model.Pedido;
 import com.prss6.sisgourmet.model.PedidoProduct;
-import com.prss6.sisgourmet.model.Product;
 import com.prss6.sisgourmet.repository.PedidoRepository;
 import com.prss6.sisgourmet.service.PedidoProductService;
 import com.prss6.sisgourmet.service.PedidoService;
+import com.prss6.sisgourmet.service.ProductService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -38,12 +38,17 @@ public class PedidoResource {
     private PedidoRepository pedidoRepository;
     
     @Autowired
+    private ProductService productService;
+    
+    @Autowired
     private PedidoProductService pedidoProductService;
 
     @PostMapping
     public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
         for (PedidoProduct pedidoProduto : pedido.getProducts()) {
             pedidoProduto.setPedido(pedido);
+            
+            productService.abaterQuantidade(pedidoProduto.getProduct().getId(), pedidoProduto.getQuantity());
             pedidoProductService.savePedidoProduct(pedidoProduto);
         }
 

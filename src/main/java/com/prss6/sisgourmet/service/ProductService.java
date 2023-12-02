@@ -1,5 +1,7 @@
 package com.prss6.sisgourmet.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,5 +24,29 @@ public class ProductService {
 
     public Product findProductById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
+    }
+
+    public Product updateEstoque(Long id, Boolean estoque) {
+        Product productSaved = findProductById(id);
+        productSaved.setEstoque(estoque);
+        return productRepository.save(productSaved);
+    }
+
+    @Transactional 
+    public Product abaterQuantidade(Long id, Integer quantidade) {
+        Product productSaved = findProductById(id);
+
+        if (hasSufficientStock(id, quantidade)) {
+            int novaQuantidade = productSaved.getQtd_items() - quantidade;
+            productSaved.setQtd_items(novaQuantidade);
+            return productRepository.save(productSaved);
+        } else {
+        	return productSaved;
+        }
+    }
+
+    public boolean hasSufficientStock(Long productId, int quantitySold) {
+        Product product = findProductById(productId);
+        return product.getEstoque() && product.getQtd_items() >= quantitySold;
     }
 }
