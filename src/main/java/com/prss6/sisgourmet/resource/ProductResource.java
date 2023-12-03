@@ -78,10 +78,16 @@ public class ProductResource {
         return ResponseEntity.ok(productSaved);
     }
 	
-    @PatchMapping("/{id}/updateQtdItems")
-    public ResponseEntity<Product> updateQtdItems(@PathVariable Long id,
-                                                  @RequestParam Integer qtdItems){
-        Product productSaved = productService.abaterQuantidade(id, qtdItems);
-        return ResponseEntity.ok(productSaved);
-    }
+	@PatchMapping("/{id}/updateQtdItems")
+	public ResponseEntity<?> updateQtdItems(@PathVariable Long id,
+	                                         @RequestParam Integer qtdItems){
+	    try {
+	        Product productSaved = productService.abaterQuantidade(id, qtdItems);
+	        return ResponseEntity.ok(productSaved);
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno ao processar a solicitação.");
+	    }
+	}
 }

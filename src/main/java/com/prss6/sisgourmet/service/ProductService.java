@@ -5,6 +5,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.prss6.sisgourmet.model.Product;
@@ -36,14 +38,21 @@ public class ProductService {
     public Product abaterQuantidade(Long id, Integer quantidade) {
         Product productSaved = findProductById(id);
 
-        if (hasSufficientStock(id, quantidade)) {
-            int novaQuantidade = productSaved.getQtd_items() - quantidade;
-            productSaved.setQtd_items(novaQuantidade);
-            return productRepository.save(productSaved);
+        if (productSaved.getEstoque()) {
+            if (hasSufficientStock(id, quantidade)) {
+                int novaQuantidade = productSaved.getQtd_items() - quantidade;
+                productSaved.setQtd_items(novaQuantidade);
+                return productRepository.save(productSaved);
+            } else {
+                throw new RuntimeException("Quantidade insuficiente em estoque para o produto com ID " + id);
+            }
         } else {
-        	return productSaved;
+            productRepository.save(productSaved);
+            return productSaved;
         }
     }
+
+
 
     public boolean hasSufficientStock(Long productId, int quantitySold) {
         Product product = findProductById(productId);
