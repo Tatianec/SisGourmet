@@ -55,6 +55,9 @@ public class Pedido {
 	@NotNull
 	@Size(max = 100)
 	private String observation;
+	
+    @NotNull
+    private String status;  
 
 	public Long getId() {
 		return id;
@@ -86,6 +89,14 @@ public class Pedido {
 
 	public void setObservation(String observation) {
 		this.observation = observation;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Long getDeskId() {

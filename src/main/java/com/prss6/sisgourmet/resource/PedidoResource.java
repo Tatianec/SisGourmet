@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,38 +31,40 @@ import com.prss6.sisgourmet.service.ProductService;
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/pedido")
 public class PedidoResource {
-	
-    @Autowired
-    private PedidoService pedidoService;
 
-    @Autowired
-    private PedidoRepository pedidoRepository;
-    
-    @Autowired
-    private ProductService productService;
-    
-    @Autowired
-    private PedidoProductService pedidoProductService;
+	@Autowired
+	private PedidoService pedidoService;
 
-    @PostMapping
-    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
-        for (PedidoProduct pedidoProduto : pedido.getProducts()) {
-            pedidoProduto.setPedido(pedido);
-            
-            productService.abaterQuantidade(pedidoProduto.getProduct().getId(), pedidoProduto.getQuantity());
-            pedidoProductService.savePedidoProduct(pedidoProduto);
-        }
+	@Autowired
+	private PedidoRepository pedidoRepository;
 
-        Pedido novoPedido = pedidoService.savePedido(pedido);
+	@Autowired
+	private ProductService productService;
 
-        return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
-    }
-    
-	@GetMapping
-	public List<Pedido> list(){
-		return pedidoRepository.findAll();
+	@Autowired
+	private PedidoProductService pedidoProductService;
+
+	@PostMapping
+	public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
+
+		pedido.setStatus("Em Aberto");
+
+		for (PedidoProduct pedidoProduto : pedido.getProducts()) {
+			pedidoProduto.setPedido(pedido);
+
+			productService.abaterQuantidade(pedidoProduto.getProduct().getId(), pedidoProduto.getQuantity());
+			pedidoProductService.savePedidoProduct(pedidoProduto);
+		}
+
+		Pedido novoPedido = pedidoService.savePedido(pedido);
+
+		return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
 	}
 
+	@GetMapping
+	public List<Pedido> list() {
+		return pedidoRepository.findAll();
+	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Pedido> findById(@PathVariable Long id) {
@@ -79,9 +82,14 @@ public class PedidoResource {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Pedido> update(@PathVariable Long id, @Valid @RequestBody Pedido pedido) {
-		Pedido pedidoSaved = pedidoService.update(id, pedido);
-		return ResponseEntity.ok(pedidoSaved);
-	}
+    public ResponseEntity<Pedido> updateStatus(@PathVariable Long id, @Valid @RequestBody Pedido pedido) {
+        Pedido pedidoSaved = pedidoService.findPedidoById(id);
+
+        pedidoSaved.setStatus(pedido.getStatus());
+
+        Pedido pedidoUpdated = pedidoService.update(id, pedidoSaved);
+
+        return ResponseEntity.ok(pedidoUpdated);
+    }
 
 }
